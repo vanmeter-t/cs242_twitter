@@ -1,3 +1,4 @@
+#settings
 TRACK_TERMS = ["trump", "clinton", "hillary clinton", "donald trump"]
 CONNECTION_STRING = "sqlite:///tweets.db"
 CSV_NAME = "tweets.csv"
