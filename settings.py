@@ -1,8 +1,9 @@
 #settings
-TRACK_TERMS = ["$ltc", "$appc", "$litecoin", "$lend"]
 CONNECTION_STRING = "sqlite:///tweets.db"
-CSV_NAME = "tweets.csv"
 TABLE_NAME = "tweets"
+CSV_NAME = "tweets.csv"
+INDEX_DIR = "indexer.tweets"
+HEADERS = ["description", "loc", "name", "user_created", "followers", "id_str", "created", "text"]
 
 try:
     from private import *

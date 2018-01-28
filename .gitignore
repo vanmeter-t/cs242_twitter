@@ -6,3 +6,6 @@ __pycache__
 stream.db
 tweets.csv
 tweets.db
+indexer.tweets
+*.doc
+*.docx
