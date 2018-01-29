@@ -1,4 +1,10 @@
-""" tokenizer regex english-language """
+"""
+CS242 Twitter Streaming - Project Part A
+Trevor Van Meter
+tvanm001
+860835689
+"""
+
 import re, sys
 
 emoji_pattern = re.compile(
