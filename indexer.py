@@ -29,17 +29,15 @@ class Indexer(object):
         writer = IndexWriter(indexDir, config)
         
         file = open(settings.CSV_NAME) # open in read mode
-
         with open(settings.CSV_NAME) as csvfile:
             readCSV = csv.reader(csvfile, delimiter=',')
             for i, row in enumerate(readCSV):
                 if i > 0:
                     doc = Document() # create a new document
+                    doc.add(TextField(TITLE, "tweet_" + str(i), Field.Store.YES))
                     for idx, val in enumerate(row):
                         doc.add(TextField(settings.HEADERS[idx], val, Field.Store.YES))
-                        #doc.add(TextField(TEXT, val, Field.Store.NO))
                     writer.addDocument(doc) # add the document to the IndexWriter
-                
         writer.close()
 
     index = classmethod(index)

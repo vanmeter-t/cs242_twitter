@@ -4,7 +4,7 @@ Trevor Van Meter
 tvanm001
 860835689
 """
-
+import sys
 from importer import *
 from indexer import *
 from search import *
