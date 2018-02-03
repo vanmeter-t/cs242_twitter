@@ -1,35 +1,36 @@
 #!/bin/bash
 #
-# Requires ant: $ sudo apt-get install ant
+# Linux: might requires java, ant: sudo apt-get install openjdk-7-jre openjdk-7-jdk ant
+# MacOSX: requires ant: sudo apt-get install ant
 
-ROOT=$(dirname $0)
 VIRTUAL_ENV=virtenv
 
-pip install virtualenv
+python3 -m pip install --user virtualenv
 mkdir $VIRTUAL_ENV
-virtualenv $VIRTUAL_ENV
+python3 -m virtualenv $VIRTUAL_ENV
 source $VIRTUAL_ENV/bin/activate
 
-mkdir $VIRTUAL_ENV/tmp-lucene
-cp pylucene-6.5.0-src.tar.gz $VIRTUAL_ENV/tmp-lucene
+pushd $VIRTUAL_ENV
+cp ../pylucene-6.5.0-src.tar.gz .
+pip install pylucene-6.5.0-src.tar.gz
 
-pushd $VIRTUAL_ENV/tmp-lucene
 tar -xzf pylucene-6.5.0-src.tar.gz
-
-pushd pylucene-6.5.0
-cp ../../$ROOT/Makefile . 
+pushd pylucene-6.5.0/
+python3 jcc/setup.py build
+python3 jcc/setup.py install
+cp ../../Makefile . 
 make
-sudo make install
+make install
 popd
 
-popd
-rm -rf tmp-lucene
+python3 -m pip install -r ../requirements.txt
 
-keys='TWITTER_KEY = ""
+keys='
+TWITTER_KEY = ""
 TWITTER_SECRET = ""
 TWITTER_APP_KEY = ""
-TWITTER_APP_SECRET = ""'
-
+TWITTER_APP_SECRET = ""
+'
 PRIVATE=private.py
 if [ ! -f "$PRIVATE" ]
 then 
