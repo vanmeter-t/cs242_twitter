@@ -37,13 +37,15 @@ With the supported `{options...}`
     - Queries Twitter for 10,000 teets returned for search term
 5. `--skipIndex {true/false}`
     - Skips index generation if already exists
+6. `--maxTweetCount {integer}`
+    - Will only collect this number of tweets
 
 Examples:
 ```cmd
-python3 main.py --generateFile tweets.csv --search "Term1","Term2"
+python3 main.py --generateFile tweets.csv --search "Term1","Term2" --maxTweetCount 10000
 ```
 ```cmd
-python3 main.py --file tweets.csv --skipIndex --search "Term1"
+python3 main.py --file tweets.csv --skipIndex true --search "Term1"
 ```
 ## Authors
 

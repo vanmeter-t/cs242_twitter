@@ -13,7 +13,6 @@ global totalCount
 totalCount = 0
 
 global maxCount
-maxCount = 10000
 
 class StreamListener(tweepy.StreamListener):
     """Sub-class StreamListener for tweepy"""
@@ -68,7 +67,6 @@ class StreamListener(tweepy.StreamListener):
 class Importer(object):
 
     def run(cls, argv):
-        print(argv)
         global csvWriter
         global totalCount 
         global maxCount
@@ -86,6 +84,8 @@ class Importer(object):
             os.remove(argv["generateFile"])
         except Exception as err:
             print("try remove: .csv file not found") # do nothing
+
+        maxCount = int(argv["maxTweetCount"])
 
         csvFile = open(argv["generateFile"], 'a')
         csvWriter = csv.writer(csvFile)

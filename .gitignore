@@ -9,4 +9,4 @@ tweets.csv
 tweets.db
 indexer.tweets
 *.doc
-*.docx
+*.csvx
