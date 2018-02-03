@@ -22,20 +22,21 @@ What things you need to install the software and how to install them
 
 Follow the installation instructions for Python and PyLucene 
 
-**CREATE THE FOLLOWING FILE**
+- Requires ant: $ sudo apt-get install ant
+
+- Execute the following command to install and setup
+```cmd
+./installer.sh
+```
+
+**COMPLETE THE FOLLOWING FILE**
+
 Twitter API Credentials need to be stored in the `private.py` file: as follows:
 ```
 TWITTER_KEY = ""
 TWITTER_SECRET = ""
 TWITTER_APP_KEY = ""
 TWITTER_APP_SECRET = ""
-```
-
-- Requires ant: $ sudo apt-get install ant
-
-- Execute the following command to install and setup PyLucene
-```cmd
-
 ```
 
 ## Running the tests
@@ -48,14 +49,19 @@ python3 main.py {options...}
 
 With the supported `{options...}`
 
-1. `--generateFile {outputFileName}`
-2. `--file {inputFileName}`
-3. `--search {searchTerm}`
-4. `--searchTwitter {outputFileName}`
+- `--generateFile {outputFileName}`
+
+- `--file {inputFileName}`
+
+- `--search {searchTerm}`
+
+- `--searchTwitter {outputFileName}`
     - Queries Twitter for 10,000 teets returned for search term
-5. `--skipIndex {true/false}`
+
+- `--skipIndex {true/false}`
     - Skips index generation if already exists
-6. `--maxTweetCount {integer}`
+
+- `--maxTweetCount {integer}`
     - Will only collect this number of tweets
 
 Examples:
