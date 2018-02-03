@@ -97,7 +97,7 @@ class Importer(object):
             global stream
             stream_listener = StreamListener()
             stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
-            stream.filter(languages=["en"], track=["a", "the", "i", "you", "u"])
+            stream.filter(languages=["en"])
         else:
             # USER/QUERY SEARCH
             language = "en" # Language code (follows ISO 639-1 standards)

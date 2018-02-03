@@ -14,11 +14,22 @@ What things you need to install the software and how to install them
 
 - [Python 3](https://www.python.org/download/releases/3.0/)
 
+- [Tweepy](https://github.com/tweepy/tweepy)
+
 - [PyLucene](http://lucene.apache.org/pylucene/)
 
 ### Installing
 
 Follow the installation instructions for Python and PyLucene 
+
+**CREATE THE FOLLOWING FILE**
+Twitter API Credentials need to be stored in the `private.py` file: as follows:
+```
+TWITTER_KEY = ""
+TWITTER_SECRET = ""
+TWITTER_APP_KEY = ""
+TWITTER_APP_SECRET = ""
+```
 
 ## Running the tests
 
