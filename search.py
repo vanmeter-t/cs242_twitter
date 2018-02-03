@@ -67,10 +67,10 @@ class LuceneSearcher(object):
 
     def run(cls, argv):
         global searchValues
-        searchValues = argv[2].split(',')
-        print("Searching Lucene for " + argv[2])
+        searchValues = argv["search"].split(',')
+        print("Searching Lucene for " + argv["search"])
 
-        baseDir = os.path.dirname(os.path.abspath(argv[0]))
+        baseDir = os.path.dirname(os.path.abspath(argv["main"]))
         example = LuceneSearcher(baseDir)
         example.runSimple()
          

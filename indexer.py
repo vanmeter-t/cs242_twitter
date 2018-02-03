@@ -20,6 +20,7 @@ from org.apache.lucene.document import Document, Field, TextField
 
 TITLE = "title"
 TEXT = "text"
+global fileName
 
 class Indexer(object):
 
@@ -28,8 +29,9 @@ class Indexer(object):
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE)
         writer = IndexWriter(indexDir, config)
         
-        file = open(settings.CSV_NAME) # open in read mode
-        with open(settings.CSV_NAME) as csvfile:
+        global fileName
+        file = open(fileName) # open in read mode
+        with open(fileName) as csvfile:
             readCSV = csv.reader(csvfile, delimiter=',')
             for i, row in enumerate(readCSV):
                 if i > 0:
@@ -67,7 +69,11 @@ class LuceneIndexer(object):
 
     def run(cls, argv):
         lucene.initVM(vmargs=['-Djava.awt.headless=true'])
-        baseDir = os.path.dirname(os.path.abspath(argv[0]))
+        baseDir = os.path.dirname(os.path.abspath(argv["main"]))
+        
+        global fileName
+        fileName = argv["file"]
+        
         example = LuceneIndexer(baseDir)
         example.createIndex()
                     

@@ -83,50 +83,42 @@ class Importer(object):
         api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
         try:
-            os.remove(settings.CSV_NAME)
+            os.remove(argv["generateFile"])
         except Exception as err:
             print("try remove: .csv file not found") # do nothing
 
-        csvFile = open(settings.CSV_NAME, 'a')
+        csvFile = open(argv["generateFile"], 'a')
         csvWriter = csv.writer(csvFile)
         csvWriter.writerow(settings.HEADERS)
 
-        # STREAM ~ set subclass StreamListener for tweepy 
-        # global stream
-        # stream_listener = StreamListener()
-        # stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
-        # stream.filter(languages=["en"], track=["a", "the", "i", "you", "u"])
+        # STREAM ~ set subclass StreamListener for tweepy
 
-        # USER/QUERY SEARCH 
-        # language = "en" # Language code (follows ISO 639-1 standards)
-        # query = "Tiger Woods" # The search term you want to find
-        # name = "nytimes" # The Twitter user who we want to get tweets from
-        # tweetCount = 20 # Number of tweets to pull
-        # results = api.user_timeline(id=name, count=tweetCount)
-        # results = api.search(q=query, lang=language, count=tweetCount)
-        
-        # USER/QUERY SEARCH
-        language = "en" # Language code (follows ISO 639-1 standards)
-        query = argv[1] # The search term you want to find
-        name = argv[1] # The Twitter user who we want to get tweets from
-        # results = api.user_timeline(id=name, count=maxCount)
-        print("Searching Twitter for " + query)
-        results = api.search(q=query, lang=language, count=maxCount)
+        if not argv["searchTwitter"]:
+            global stream
+            stream_listener = StreamListener()
+            stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
+            stream.filter(languages=["en"], track=["a", "the", "i", "you", "u"])
+        else:
+            # USER/QUERY SEARCH
+            language = "en" # Language code (follows ISO 639-1 standards)
+            query = argv["searchTwitter"] # The search term you want to find
+            print("Searching Twitter for " + query)
+            results = api.search(q=query, lang=language, count=maxCount)
 
-        for tweet in results:
-            id_str = tweet.id_str
-            name = tweet.user.screen_name
-            created = tweet.created_at
-            loc = tweet.user.location
-            mentions = tweet.entities.get('user_mentions')
-            hashtags = tweet.entities.get('hashtags')
-            text = tweet.text
-            try:
-                csvWriter.writerow([id_str, name, created, loc, mentions, hashtags, text.encode('utf-8')])
-            except Exception as err:
-                print(err)
-        
-        csvFile.close()
+            for tweet in results:
+                id_str = tweet.id_str
+                name = tweet.user.screen_name
+                created = tweet.created_at
+                loc = tweet.user.location
+                mentions = tweet.entities.get('user_mentions')
+                hashtags = tweet.entities.get('hashtags')
+                text = tweet.text
+                try:
+                    csvWriter.writerow([id_str, name, created, loc, mentions, hashtags, text.encode('utf-8')])
+                except Exception as err:
+                    print(err)
+            
+            csvFile.close()
 
     run = classmethod(run)
 

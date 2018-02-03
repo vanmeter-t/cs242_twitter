@@ -12,15 +12,46 @@ from search import *
 class Main(object):
     def run(cls, argv):
 
-        if argv[3] != "--skipImporter":
-            Importer.run(sys.argv)
+        args = { "main" : argv[0]}
+        for idx, arg in enumerate(argv):
+            if idx % 2 != 0:
+                # define the function blocks
+                if arg == "--generateFile":
+                    args["generateFile"] = argv[idx+1]
+                    args["file"] = argv[idx+1]
+                elif arg == "--file":
+                    args["generateFile"] = ""
+                    args["file"] = argv[idx+1]
 
-        if len(argv) <= 4 or argv[4] != "--skipIndexer":
-            LuceneIndexer.run(sys.argv)
+                if arg == "--search":
+                    print("--search" + argv[idx+1])
+                    args["search"] = argv[idx+1]
+                else:
+                    args["search"] = ""
+
+                if arg == "--searchTwitter":
+                    args["searchTwitter"] = argv[idx+1]
+                else:
+                    args["searchTwitter"] = ""
+
+                if arg == "--skipIndex":
+                    args["skipIndex"] = argv[idx+1]
+                else:
+                    args["skipIndex"] = False
+
+        if args["generateFile"] != "":
+            Importer.run(args)
+
+        if not args["skipIndex"]:
+            LuceneIndexer.run(args)
         else:
             lucene.initVM(vmargs=['-Djava.awt.headless=true'])
 
-        LuceneSearcher.run(sys.argv)
+        if args["search"] != "":
+            LuceneSearcher.run(args)
+        else:
+            print("No search term provided by --search")
+
     run = classmethod(run)
 
 if __name__ == '__main__':
