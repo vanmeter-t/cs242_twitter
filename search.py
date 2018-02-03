@@ -23,7 +23,7 @@ from org.apache.lucene.document import Document, Field, TextField
 
 TITLE = "title"
 TEXT = "text"
-searchValues = ['Torrey Pines']
+global searchValues
 
 class Searcher(object):
 
@@ -66,7 +66,10 @@ class LuceneSearcher(object):
         indexReader.close()
 
     def run(cls, argv):
-        #lucene.initVM(vmargs=['-Djava.awt.headless=true'])
+        global searchValues
+        searchValues = argv[2].split(',')
+        print("Searching Lucene for " + argv[2])
+
         baseDir = os.path.dirname(os.path.abspath(argv[0]))
         example = LuceneSearcher(baseDir)
         example.runSimple()

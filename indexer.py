@@ -5,7 +5,7 @@ tvanm001
 860835689
 """
 
-import os, sys, lucene, settings, csv
+import os, sys, lucene, settings, csv, ast
 
 from java.nio.file import Paths
 from java.lang import System
@@ -35,8 +35,22 @@ class Indexer(object):
                 if i > 0:
                     doc = Document() # create a new document
                     doc.add(TextField(TITLE, "tweet_" + str(i), Field.Store.YES))
-                    for idx, val in enumerate(row):
-                        doc.add(TextField(settings.HEADERS[idx], val, Field.Store.YES))
+                    try:
+                        for idx, val in enumerate(row):
+                            # if hashtag or use mention, break down each as a field value
+                            if val:
+                                if settings.HEADERS[idx] == "hashtags":
+                                    obj = ast.literal_eval(val)
+                                    for t in obj:
+                                        doc.add(TextField(settings.HEADERS[idx], t.get('text'), Field.Store.YES))
+                                elif settings.HEADERS[idx] == "mentions":
+                                    obj = ast.literal_eval(val)
+                                    for m in obj:
+                                        doc.add(TextField(settings.HEADERS[idx], m.get('screen_name'), Field.Store.YES))
+                                else:
+                                    doc.add(TextField(settings.HEADERS[idx], val, Field.Store.YES))
+                    except ValueError as err:
+                        print(err) 
                     writer.addDocument(doc) # add the document to the IndexWriter
         writer.close()
 
