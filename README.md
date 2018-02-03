@@ -31,6 +31,13 @@ TWITTER_APP_KEY = ""
 TWITTER_APP_SECRET = ""
 ```
 
+- Requires ant: $ sudo apt-get install ant
+
+- Execute the following command to install and setup PyLucene
+```cmd
+
+```
+
 ## Running the tests
 
 To run the full test execute the following command: 
