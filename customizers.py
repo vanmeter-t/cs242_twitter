@@ -24,14 +24,9 @@ class CustomAnalyzer(PythonAnalyzer):
 
     def createComponents(self, fieldName):
         source = StandardTokenizer()
-        # filter = StandardFilter(source)
-
         filter = PhraseFilter(source, self.phrases)   
-            
-
-        # filter = LowerCaseFilter(filter)
-        # filter = PorterStemFilter(filter)
-        # filter = StopFilter(filter, StopAnalyzer.ENGLISH_STOP_WORDS_SET)
+        filter = LowerCaseFilter(filter)
+        filter = StopFilter(filter, StopAnalyzer.ENGLISH_STOP_WORDS_SET)
         
         return self.TokenStreamComponents(source, filter)
 
@@ -40,8 +35,7 @@ class CustomAnalyzer(PythonAnalyzer):
 
 class PhraseFilter(PythonTokenFilter):
     '''
-    PhraseFilter is a TokenFilter that adds in phrases (as tokens) that match
-    user-defined phrases.  You can then use these tokens when exporting a TDM.
+    PhraseFilter allows for matching user-defined phrases
     '''
     TOKEN_TYPE_PHRASE = "PHRASE"
 
