@@ -16,7 +16,7 @@
             ],
             "args": [
                 "--file", "tweets2.csv",
-                "--search", "@puttoutgolf",
+                "--search", "PGA Tour",
                 "--customPhrases", "PGA Tour,Rickie Fowler"
             ]
         },

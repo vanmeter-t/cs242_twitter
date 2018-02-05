@@ -7,6 +7,7 @@ tvanm001
 
 import os, sys, lucene, settings, csv
 
+from customizers import *
 from datetime import datetime
 
 from java.nio.file import Paths
@@ -28,9 +29,10 @@ global searchValues
 class Searcher(object):
 
     def searchWithTerm(cls, term, indexReader):
-        analyzer = StandardAnalyzer()
+        analyzer = CustomAnalyzer()
         query = QueryParser(TEXT, analyzer).parse(term)
 
+        print(query)
         hitsPerPage = 50
         start = datetime.now()
         searcher = IndexSearcher(indexReader)

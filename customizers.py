@@ -26,14 +26,13 @@ class CustomAnalyzer(PythonAnalyzer):
         source = StandardTokenizer()
         # filter = StandardFilter(source)
 
-        if self.phrases:
-            filter = PhraseFilter(source, self.phrases)   
+        filter = PhraseFilter(source, self.phrases)   
+            
 
         # filter = LowerCaseFilter(filter)
         # filter = PorterStemFilter(filter)
         # filter = StopFilter(filter, StopAnalyzer.ENGLISH_STOP_WORDS_SET)
         
-
         return self.TokenStreamComponents(source, filter)
 
     def initReader(self, fieldName, reader):
