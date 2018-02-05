@@ -7,6 +7,8 @@ tvanm001
 
 import os, sys, lucene, settings, csv, ast
 
+from customizers import *
+
 from java.nio.file import Paths
 from java.lang import System
 from java.text import DecimalFormat
@@ -21,14 +23,25 @@ from org.apache.lucene.document import Document, Field, TextField
 TITLE = "title"
 TEXT = "text"
 global fileName
+global customPhrases
 
 class Indexer(object):
 
     def index (cls, indexDir):
-        config = IndexWriterConfig(StandardAnalyzer())
+
+        # Custom Analyzer
+        global customPhrases
+        customAnalyzer = CustomAnalyzer()
+        customAnalyzer.customPhrases(customPhrases)
+        config = IndexWriterConfig(customAnalyzer)
+        
+        # Standard Analyzer
+        # config = IndexWriterConfig(StandardAnalyzer())
+
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE)
         writer = IndexWriter(indexDir, config)
         
+        print("Begin indexing...")
         global fileName
         file = open(fileName) # open in read mode
         with open(fileName) as csvfile:
@@ -73,6 +86,9 @@ class LuceneIndexer(object):
         
         global fileName
         fileName = argv["file"]
+
+        global customPhrases
+        customPhrases = argv["customPhrases"]
         
         example = LuceneIndexer(baseDir)
         example.createIndex()

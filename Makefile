@@ -44,7 +44,7 @@ LUCENE=$(LUCENE_SRC)/lucene
 #
 
 # Mac OS X 10.12 (64-bit Python 3.6, Java 1.8)
-PREFIX_PYTHON=..
+PREFIX_PYTHON=/usr
 ANT=/usr/local/bin/ant
 PYTHON=$(PREFIX_PYTHON)/bin/python
 JCC=$(PYTHON) -m jcc.__main__ --shared --arch x86_64

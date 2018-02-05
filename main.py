@@ -18,7 +18,8 @@ class Main(object):
                 "search": "",
                 "searchTwitter": "", 
                 "skipIndex": False,
-                "maxTweetCount": 1000
+                "maxTweetCount": 1000,
+                "customPhrases": []
             }
 
         for idx, arg in enumerate(argv):
@@ -43,8 +44,9 @@ class Main(object):
 
                 if arg == "--maxTweetCount":
                     args["maxTweetCount"] = argv[idx+1]
-                
-        print(args)
+
+                if arg == "--customPhrases":
+                    args["customPhrases"] = argv[idx+1].split(",")
         
         if args["generateFile"] != "":
             Importer.run(args)

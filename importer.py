@@ -30,16 +30,6 @@ class StreamListener(tweepy.StreamListener):
 
             tokens = tokenize(status.text) 
             if tokens[0] != 'RT':
-                #print(tokens)
-
-                # description = status.user.description
-                # loc = status.user.location
-                # text = status.text
-                # user_created = status.user.created_at
-                # followers = status.user.followers_count
-                # created = status.created_at
-                # retweets = status.retweet_count
-
                 id_str = status.id_str
                 name = status.user.screen_name
                 created = status.created_at
@@ -66,18 +56,36 @@ class StreamListener(tweepy.StreamListener):
 
 class Importer(object):
 
-    def run(cls, argv):
+    def write(self, csvFile, results):
         global csvWriter
         global totalCount 
         global maxCount
         global stream
 
-        # setup tweepy with Twitter API Keys/Secrets
-        # using AppAuthHandler application level auth instead of OAuthHandler for higher query limits
+        for tweet in results:
+            id_str = tweet.id_str
+            name = tweet.user.screen_name
+            created = tweet.created_at
+            loc = tweet.user.location
+            mentions = tweet.entities.get('user_mentions')
+            hashtags = tweet.entities.get('hashtags')
+            text = tweet.text
+            try:
+                csvWriter.writerow([id_str, name, created, loc, mentions, hashtags, text.encode('utf-8')])
+            except Exception as err:
+                print(err)
+        
+            
+    write = classmethod(write)
+
+    def run(self, argv):
+        global csvWriter
+        global totalCount 
+        global maxCount
+        global stream
+
         auth = tweepy.OAuthHandler(settings.TWITTER_APP_KEY, settings.TWITTER_APP_SECRET)
         auth.set_access_token(settings.TWITTER_KEY, settings.TWITTER_SECRET)
-
-        # these two parameters will "auto-sleep" and wait so the Twitter rate limit isn't exceeded
         api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
         try:
@@ -85,40 +93,41 @@ class Importer(object):
         except Exception as err:
             print("try remove: .csv file not found") # do nothing
 
-        maxCount = int(argv["maxTweetCount"])
-
         csvFile = open(argv["generateFile"], 'a')
         csvWriter = csv.writer(csvFile)
         csvWriter.writerow(settings.HEADERS)
 
-        # STREAM ~ set subclass StreamListener for tweepy
-
         if not argv["searchTwitter"]:
+            # STREAM ~ set subclass StreamListener for tweepy
             global stream
             stream_listener = StreamListener()
             stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
             stream.filter(languages=["en"])
         else:
             # USER/QUERY SEARCH
+            lastId = -1
+            totalCt = 0
             language = "en" # Language code (follows ISO 639-1 standards)
             query = argv["searchTwitter"] # The search term you want to find
+            maxCount = int(argv["maxTweetCount"])
             print("Searching Twitter for " + query)
-            results = api.search(q=query, lang=language, count=maxCount)
 
-            for tweet in results:
-                id_str = tweet.id_str
-                name = tweet.user.screen_name
-                created = tweet.created_at
-                loc = tweet.user.location
-                mentions = tweet.entities.get('user_mentions')
-                hashtags = tweet.entities.get('hashtags')
-                text = tweet.text
+            while totalCt < maxCount:
+                count = maxCount - totalCt
                 try:
-                    csvWriter.writerow([id_str, name, created, loc, mentions, hashtags, text.encode('utf-8')])
-                except Exception as err:
-                    print(err)
+                    newTweets = api.search(q=query, lang=language, count=count, max_id=str(lastId - 1))
+                    if not newTweets:
+                        break
+                    self.write(csvFile, newTweets)
+                    totalCt += len(newTweets)
+                    lastId = newTweets[-1].id
+                except tweepy.TweepError as e:
+                    print("Tweepy Error: " + e)
+                    break
             
-            csvFile.close()
+            print("Results found: " + str(totalCt))
+
+        csvFile.close()
 
     run = classmethod(run)
 
