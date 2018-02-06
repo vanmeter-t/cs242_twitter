@@ -16,7 +16,7 @@
             ],
             "args": [
                 "--file", "tweets2.csv",
-                "--search", "PGA Tour",
+                "--searchIndex", "#WMPO",
                 "--customPhrases", "PGA Tour,Rickie Fowler"
             ]
         },

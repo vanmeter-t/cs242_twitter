@@ -15,7 +15,7 @@ class Main(object):
         args = { "main" : argv[0], 
                 "generateFile": "",
                 "file": "",
-                "search": "",
+                "searchIndex": "",
                 "searchTwitter": "", 
                 "skipIndex": False,
                 "maxTweetCount": 1000,
@@ -33,8 +33,8 @@ class Main(object):
                     args["generateFile"] = ""
                     args["file"] = argv[idx+1]
 
-                if arg == "--search":
-                    args["search"] = argv[idx+1]
+                if arg == "--searchIndex":
+                    args["searchIndex"] = argv[idx+1]
 
                 if arg == "--searchTwitter":
                     args["searchTwitter"] = argv[idx+1]
@@ -56,10 +56,10 @@ class Main(object):
         else:
             lucene.initVM(vmargs=['-Djava.awt.headless=true'])
 
-        if args["search"] != "":
+        if args["searchIndex"] != "":
             LuceneSearcher.run(args)
         else:
-            print("No search term provided by --search")
+            print("No search term provided by --searchIndex")
 
     run = classmethod(run)
 

@@ -53,7 +53,7 @@ With the supported `{options...}`
 
 - `--file {inputFileName}`
 
-- `--search {searchTerm}`
+- `--searchIndex {searchTerm}`
 
 - `--searchTwitter {outputFileName}`
     - Queries Twitter for 10,000 teets returned for search term
@@ -64,13 +64,19 @@ With the supported `{options...}`
 - `--maxTweetCount {integer}`
     - Will only collect this number of tweets
 
+- `--customPhrase {customPhrases}`
+    - Will customize the index for these specific phrases (i.e. "Hello World", "West Coast", etc.)
+
 Examples:
 ```cmd
-python3 main.py --generateFile tweets.csv --search "Term1","Term2" --maxTweetCount 10000
+python3 main.py --generateFile tweets.csv --searchIndex "Term1","Term2" --maxTweetCount 10000
 ```
 ```cmd
-python3 main.py --file tweets.csv --skipIndex true --search "Term1"
+python3 main.py --file tweets.csv --skipIndex true --searchIndex "Term1"
 ```
+```cmd
+ python3 main.py --file tweets2.csv --searchIndex "#WMPO" --customPhrases "PGA Tour","Rickie Fowler"
+ ```
 ## Authors
 
 * **Trevor Van Meter** - GitHub: [vanmeter-t](https://github.com/vanmeter-t)
