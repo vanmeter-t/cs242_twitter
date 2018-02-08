@@ -40,7 +40,7 @@ class StreamListener(tweepy.StreamListener):
 
                 try:
                     try:
-                        csvWriter.writerow([id_str, name, created, loc, mentions, hashtags, text.encode('utf-8')])
+                        csvWriter.writerow([id_str, name.encode('utf-8'), created, loc, mentions.encode('utf-8'), hashtags.encode('utf-8'), text.encode('utf-8')])
                         totalCount += 1
                     except Exception as err:
                         print(err)

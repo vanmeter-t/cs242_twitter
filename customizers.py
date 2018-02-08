@@ -19,60 +19,51 @@ class CustomTokenizer(PythonTokenizer):
     ALPHANUM = "ALPHANUM"
 
     def __init__(self, getReader):
-        super(CustomTokenizer, self).__init__()
-        self.getReader = getReader
-        self.i = 0
-        self.data = []
-
-        self.termAttr = self.addAttribute(CharTermAttribute.class_)
-        self.typeAttr = self.addAttribute(TypeAttribute.class_)
-        self.offsetAttr = self.addAttribute(OffsetAttribute.class_)
-        self.posIncrAttr = self.addAttribute(PositionIncrementAttribute.class_)
-        self.save = self.cloneAttributes()
-
+        super().__init__()
+        self.offset = 0
+        self.termAtt = self.addAttribute(CharTermAttribute.class_)
+        self.offsetAtt = self.addAttribute(OffsetAttribute.class_)
+        self.save = super().cloneAttributes()
         self.stack = []
+        
+    def incrementToken(self):        
 
-    def incrementToken(self):
+        # if val == 35: # # Hashtag
+        #     self.isHashtag = True
+
+        # if val == 64: # @ Mention
+        #     self.isMention = True
+
+        if len(self.stack) > 0:
+            saved = self.stack.pop()
+            self.save.restoreState(saved)
+
+        upto = 0;
+        buffer = [];
         while True:
-            reader = self.getReader()
-            val = reader.read()
-
-            if val == -1: #EOF
-                self.add("".join(self.data))
+            length = self.input.read()
+            if length == -1: 
+                if len(buffer) > 0:
+                    self.addToken("".join(buffer), upto);
                 return False
+            upto += 1;
+            buffer.append(chr(length));
+      
+        self.addToken("".join(buffer));
+        return True;
 
-            if val == 32: #SPACE
-                self.add("".join(self.data))
-                return False
-
-            if len(self.stack) > 0:
-                syn = self.stack.pop()
-                self.restoreState(syn)
-                return True
-
-            self.data.append(chr(val))
-            self.i += 1
-    
-    def add(self, arg):
+    def addToken(self, arg, upto):
         current = self.captureState()
         self.save.restoreState(current)
-
-        self.termAttr = self.save.addAttribute(CharTermAttribute.class_)
-        self.typeAttr = self.save.addAttribute(TypeAttribute.class_)
-        self.posIncrAttr = self.save.addAttribute(PositionIncrementAttribute.class_)
-        self.offsetAttr = self.addAttribute(OffsetAttribute.class_)
-
-        self.termAttr.setEmpty()
-        self.termAttr.append(arg)
-        self.typeAttr.setType(self.ALPHANUM)
-        self.posIncrAttr.setPositionIncrement(1)
-        self.offsetAttr.setOffset(self.i, self.i+len(self.data))
-
+        self.termAtt = self.save.getAttribute(CharTermAttribute.class_)
+        self.offsetAtt = self.save.getAttribute(OffsetAttribute.class_)
+        self.termAtt.setEmpty()
+        self.termAtt.append(arg)
+        self.termAtt.setLength(upto)
+        self.offsetAtt.setOffset(self.offset, self.offset + upto)
+        self.offset += upto
         self.stack.append(self.save.captureState())
 
-        self.data = []
-        self.i = 0
-                
 class CustomAnalyzer(PythonAnalyzer):
     def __init__(self):
         PythonAnalyzer.__init__(self)
@@ -82,8 +73,8 @@ class CustomAnalyzer(PythonAnalyzer):
         self.phrases = phrases
 
     def createComponents(self, fieldName):
-        source = StandardTokenizer()
-        #source = CustomTokenizer(lambda: self._reader)
+        #source = StandardTokenizer()
+        source = CustomTokenizer(lambda: self._reader)
         filter = CustomFilter(source, self.phrases)   
         filter = LowerCaseFilter(filter)
         filter = StopFilter(filter, StopAnalyzer.ENGLISH_STOP_WORDS_SET)
@@ -128,7 +119,7 @@ class CustomFilter(PythonTokenFilter):
             syn = self.phraseStack.pop()
             self.restoreState(syn)
             return True
-            
+
         for phrase in self.allPhrases:
             addPhrase = False
             term0 = self.termAttr.toString()

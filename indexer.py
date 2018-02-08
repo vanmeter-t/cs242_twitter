@@ -43,8 +43,7 @@ class Indexer(object):
         
         print("Begin indexing...")
         global fileName
-        file = open(fileName) # open in read mode
-        with open(fileName) as csvfile:
+        with open(fileName, encoding='utf-8') as csvfile:
             readCSV = csv.reader(csvfile, delimiter=',')
             for i, row in enumerate(readCSV):
                 if i > 0:
