@@ -53,7 +53,7 @@ With the supported `{options...}`
 
 - `--file {inputFileName}`
 
-- `--searchIndex {searchTerm}`
+- `--searchIndex {searchTerm},{searchTerm},...`
 
 - `--searchTwitter {outputFileName}`
     - Queries Twitter for 10,000 teets returned for search term
@@ -64,7 +64,7 @@ With the supported `{options...}`
 - `--maxTweetCount {integer}`
     - Will only collect this number of tweets
 
-- `--customPhrase {customPhrases}`
+- `--customPhrase {customPhrases},{customPhrases},...`
     - Will customize the index for these specific phrases (i.e. "Hello World", "West Coast", etc.)
 
 Examples:

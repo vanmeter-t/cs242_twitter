@@ -15,9 +15,11 @@
                 "RedirectOutput"
             ],
             "args": [
-                "--file", "tweets2.csv",
-                "--searchIndex", "#WMPO",
-                "--customPhrases", "PGA Tour,Rickie Fowler"
+                // "--file", "tweets2.csv",
+                // "--searchIndex", "#WMPO",
+                // "--customPhrases", "PGA Tour,Rickie Fowler"
+                "--generateFile", "tweets2.csv", 
+                "--maxTweetCount", "100"
             ]
         },
         {

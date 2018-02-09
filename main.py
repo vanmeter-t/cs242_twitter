@@ -50,16 +50,19 @@ class Main(object):
         
         if args["generateFile"] != "":
             Importer.run(args)
+        else:
+            print("Using existing file")
 
         if not args["skipIndex"]:
             LuceneIndexer.run(args)
         else:
+            print("Skipped indexing")
             lucene.initVM(vmargs=['-Djava.awt.headless=true'])
 
         if args["searchIndex"] != "":
             LuceneSearcher.run(args)
         else:
-            print("No search term provided by --searchIndex")
+            print("Skipped search, No search term provided by --searchIndex")
 
     run = classmethod(run)
 

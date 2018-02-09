@@ -42,6 +42,8 @@ class StreamListener(tweepy.StreamListener):
                     try:
                         csvWriter.writerow([id_str, name.encode('utf-8'), created, loc, mentions.encode('utf-8'), hashtags.encode('utf-8'), text.encode('utf-8')])
                         totalCount += 1
+                        if totalCount % 10000 == 0:
+                            print("Downloaded tweets: " + str(totalCount) + "...")
                     except Exception as err:
                         print(err)
                 except Exception as err:
@@ -122,7 +124,7 @@ class Importer(object):
                     totalCt += len(newTweets)
                     lastId = newTweets[-1].id
                 except tweepy.TweepError as e:
-                    print("Tweepy Error: " + e)
+                    print("Tweepy Error: " + str(e))
                     break
             
             print("Results found: " + str(totalCt))
